@@ -8,9 +8,11 @@ program test
     
     real(wp) :: L(8)[*]
 
-   ! call test_lineclip()
+    if(this_image()==1) then
+      call test_lineclip()
 
-   ! call test_array_lineclip()
+      call test_array_lineclip()
+    endif
     
     call coarray_lineclip(L)
     if(this_image()==1)  print *,L
