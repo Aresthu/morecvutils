@@ -28,7 +28,7 @@ subroutine Ccohensutherland(xmin,ymax,xmax,ymin,Np,x1,y1,x2,y2) bind(c)
 ! out - intersection points with box. If no intersection, all NaN
     
     integer(c_int), intent(in) :: Np
-    real(wp),intent(in), dimension(Np) :: xmin,ymax,xmax,ymin
+    real(wp),intent(in) :: xmin,ymax,xmax,ymin
     real(wp),intent(inout), dimension(Np):: x1,y1,x2,y2
   
     call cohensutherland(xmin, ymax, xmax,ymin,x1,y1,x2,y2)
