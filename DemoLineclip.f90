@@ -15,7 +15,7 @@ program test
     endif
     
     call coarray_lineclip(L)
-    if(this_image()==1)  print *,L
+!    if(this_image()==1)  print *,L
 
 contains
   
@@ -89,9 +89,11 @@ subroutine coarray_lineclip(length)
     real(wp),parameter :: xmin=1., ymax=5.,xmax=4., ymin=3.
     real(wp) :: truelength(Np) =[2.40370083, 3.,0.,0.,0.,0.,2.,2.5]
     real(wp) :: nan
-    integer :: i
+    integer :: Ni, im, s0,s1
     real(wp),intent(out) :: length(Np)[*]
     
+    Ni = num_images()
+    im=this_image()
     
     nan = ieee_value(1.,ieee_quiet_nan)
     truelength(3:6) = nan
@@ -101,21 +103,19 @@ subroutine coarray_lineclip(length)
     x2=[4.,5.,1.,1.5,2.,2.5,3.0,3.5]
     y2=[6.,4.,1.,1.5,2.,2.5,3.0,3.5]
 
-
-    do i = this_image(), Np, num_images() ! Each image works on a subset of the problem
-        call cohensutherland(xmin,ymax,xmax,ymin,x1(i),y1(i),x2(i),y2(i))
-        length(i)[1] = hypot((x2(i)-x1(i)), (y2(i)-y1(i)))
-    enddo
-       
+!------ slice problem
+    s0 = (im-1)*Np/Ni+1
+    s1 = im*Np/Ni
+    print '(A,I3,A,I3,A,I3)','Image',im,' solved over indices ',s0,':',s1
+!------- solve problem
+    call cohensutherland(xmin,ymax,xmax,ymin, &
+                x1(s0:s1), y1(s0:s1), x2(s0:s1), y2(s0:s1))
+                
+    length(s0:s1)[1] = hypot(x2(s0:s1) - x1(s0:s1), y2(s0:s1) - y1(s0:s1))
+!-------- finish up 
     sync all
  
-    if (this_image()==1) then
-       ! do i = 1,Np,num_images()
-        !    print *, length(i)[i]
-        !    length(i)[1] = length(i)[i]
-        !enddo
- 
-        print *,'used',num_images(),'images to solve.'
+    if (im==1) then
         call assert_isclose(length, truelength, equal_nan=.true.)
         print *, 'OK coarray_lineclip'
     endif

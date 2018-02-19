@@ -34,6 +34,12 @@ If you want to use the Fortran Cohen-Sutherland line clipping modules directly (
     cmake ..
     make
     
+If you don't have a modern Fortran compiler with coarray support, do::
+
+    cd bin
+    TRAVIS=1 cmake ..
+    make
+    
 
 Usage
 =====

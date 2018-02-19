@@ -2,7 +2,6 @@
 install_requires = ['numpy','imageio']
 tests_require=['nose','coveralls']
 # %%
-import subprocess
 from setuptools import setup,find_packages
 
 setup(name='morecvutils',
@@ -25,9 +24,3 @@ setup(name='morecvutils',
                       'tests':tests_require},
       python_requires='>=3.5',
 	  )
-
-try:
-    subprocess.run(['cmake','..'],cwd='bin',timeout=10)
-    subprocess.run(['make'],cwd='bin',timeout=10)
-except Exception:
-    pass
