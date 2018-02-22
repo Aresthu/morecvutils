@@ -6,7 +6,7 @@ from setuptools import setup,find_packages
 
 setup(name='morecvutils',
       packages=find_packages(),
-      description='Computer Vision utilities, Cohen-Sutherland line clipping, OpenCV plot helpers for Optical Flow and Blob Analysis, AVI codec helpers',
+      description='Computer Vision utilities, OpenCV plot helpers for Optical Flow and Blob Analysis, AVI codec helpers',
       long_description=open('README.rst').read(),
       version='0.9.2',
       author='Michael Hirsch, Ph.D.',
